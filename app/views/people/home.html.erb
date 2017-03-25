@@ -1,6 +1,20 @@
-<button type="button" name="button">Hello, click here to start the client.</button>
+<button class="js-more">Hello, click here to start the client.</button>
 
 
 <div class="display">
 
 </div>
+
+
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+    $(".js-more").on("click", function(event) {
+      $.ajax({
+        type: "GET",
+        url: '/people'
+      }).then(function(response) {
+        $('.display').append(response);
+      });
+    });
+  });
+</script>
