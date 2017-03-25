@@ -1,7 +1,11 @@
 class PeopleController < ApplicationController
 
+  def home
+
+  end
+
   def index
-    @people = People.all
+    @people = Person.all
     if @people.empty?
       render json: "People are empty."
     else
@@ -10,24 +14,29 @@ class PeopleController < ApplicationController
   end
 
   def show
-    @person = People.find_by_id(params[:id])
+    @person = Person.find_by_id(params[:id])
     if @person
       render json: @person
     end
   end
 
+  def new
+    @person = Person.new
+  end
 
   def create
-    @person = People.new(people_params)
+    @person = Person.new(people_params)
 
     if @person.save
       render json: @person
+    else
+      render json: "Didn't save."
     end
   end
 
 
   def update
-    @person = People.find_by_id(params[:id])
+    @person = Person.find_by_id(params[:id])
 
     @person.update(people_params)
     if @person.save
@@ -37,7 +46,7 @@ class PeopleController < ApplicationController
   end
 
   def destroy
-    @person = People.find_by_id(params[:id])
+    @person = Person.find_by_id(params[:id])
 
     if @person
       @person.destroy
@@ -50,7 +59,7 @@ class PeopleController < ApplicationController
   private
 
     def people_params
-      params.permit(:name, :favoriteCity)
+      params.require(:person).permit(:name, :favoriteCity)
     end
 
 end
