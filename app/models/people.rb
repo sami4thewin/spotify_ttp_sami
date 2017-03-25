@@ -1,4 +1,4 @@
-class Person < ApplicationRecord
+class People < ApplicationRecord
 
   validates_presence_of :name, :favoriteCity
 
