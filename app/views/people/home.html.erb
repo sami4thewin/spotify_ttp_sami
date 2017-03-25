@@ -9,7 +9,8 @@ Hello
 <script type="text/javascript" charset="utf-8">
   $(function() {
     $(".js-more").on("click", function(event) {
-      console.log('bruh')
+      event.preventDefault();
+      console.log('bruh');
       $.ajax({
         type: "GET",
         url: '/people'
