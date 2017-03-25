@@ -2,7 +2,11 @@ class PeopleController < ApplicationController
 
   def index
     @people = People.all
-    render json: @people.to_json
+    if @people.empty?
+      render json: "People are empty."
+    else
+      render json: @people.to_json
+    end
   end
 
   def show
