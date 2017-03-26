@@ -1,23 +1,131 @@
 <button class="js-more">Hello, click here to start the client.</button>
 
+<br>
+<br>
 
-<div class="display">
-Hello
+<div class="display-init">
+
+</div>
+
+<br>
+<br>
+
+<div class="display-post">
+
+</div>
+
+<br>
+<br>
+
+<div class="display-get">
+
+</div>
+
+<br>
+<br>
+
+<div class="display-put">
+
+</div>
+
+<br>
+<br>
+
+<div class="display-get-1">
+
+</div>
+
+<br>
+<br>
+
+<div class="display-delete">
+
+</div>
+
+<br>
+<br>
+
+<div class="display-final">
+
 </div>
 
 
 <script type="text/javascript" charset="utf-8">
   $(function() {
     $(".js-more").on("click", function(event) {
-      event.preventDefault();
-      console.log('bruh');
-      $.ajax({
+      let user = {};
+       var async1 = $.ajax({
         type: "GET",
-        url: '/people'
-      }).then(function(response) {
-        $('.display').append(response);
-        alert("Successfully joined this period!");
-      });
+        url: '/people/',
+        success: function(response) {
+
+          $('.display-init').append("This is the initial GET request, this will display the index after the AJAX call is completed." + "<br/>")
+
+
+          response.length ? response.map(thing => $('.display-init').append(`${thing.id} Name: ${thing.name} Favorite City: ${thing.favoriteCity}.` + "<br/>") ) : $('.display-init').append("There are no people to display. This is the initial GET request for the client.")
+          response.map(thing => $('.display-init').append(JSON.stringify(thing) + "<br/>") )
+
+        }
+      })
+
+      $.ajax({
+        type: "POST",
+        url: '/people',
+        data: {'name': `Sean`, 'favoriteCity': `New York`}
+      }).done(function(response) {
+        user = response;
+        $('.display-post').append('We have now completed the AJAX POST request for Sean with favoriteCity being New York.' + "<br/>");
+        $('.display-post').append(JSON.stringify(response) + "<br/>")
+
+        $.ajax({
+            type: "GET",
+            url: `/people/${response.id}`,
+            // success: function(response) {
+            //   // debugger;
+            //   $('.display').append(`This is now the GET request for the newly minted database entry. Name: ${response.name}, Favorite City: ${response.favoriteCity}`)
+            // }
+        }).done(function(resp) {
+          $('.display-get').append(`We have now the completed the AJAX GET request for the newly minted database entry. Name: ${resp.name}, Favorite City: ${resp.favoriteCity}` + "<br/>")
+
+          $('.display-get').append(JSON.stringify(resp) + "<br/>")
+
+
+          $.ajax({
+            method: "PUT",
+            url: `/people/${resp.id}`,
+            data: { 'favoriteCity': 'Brooklyn'}
+          }).done(function(data) {
+            $('.display-put').append(`We have now made the AJAX PUT request for our existing entry. Name: ${data.name}, Favorite City: ${data.favoriteCity}` + "<br/>");
+            $('.display-put').append(JSON.stringify(data) + "<br/>")
+            $.ajax({
+              method: "GET",
+              url: '/people/1'
+            }).done(function(newdata) {
+              $('.display-get-1').append(`We have now made the AJAX GET request to people/1. We set up some seed data ahead of time for this so Sean won't be this entry. Name: ${newdata.name}, Favorite City: ${newdata.favoriteCity}` + "<br/>");
+              $('.display-get-1').append(JSON.stringify(newdata) + "<br/>")
+              $.ajax({
+                method: "DELETE",
+                url: '/people/1'
+              }).done(function(deletedData) {
+                $('.display-delete').append(`We have now made the AJAX DELETE request to people/1. This entry that we deleted is the one we displayed in our GET request to people/1. Name: ${deletedData.name}, Favorite City: ${deletedData.favoriteCity}` + "<br/>");
+                $('.display-delete').append(JSON.stringify(deletedData) + "<br/>")
+                $.ajax({
+                  method: "GET",
+                  url: '/people/'
+                }).done(function(finalData) {
+                  $('.display-final').append('Here is what our final index looks like: ' + "<br/>")
+                  finalData.map(thing => $('.display-final').append(`${thing.id} Name: ${thing.name} Favorite City: ${thing.favoriteCity}.` + "<br/>") )
+                  finalData.map(thing => $('.display-final').append(JSON.stringify(thing) + "<br/>") )
+                })
+
+              })
+            })
+          })
+        })
+      })
+
+
+
     });
   });
 </script>

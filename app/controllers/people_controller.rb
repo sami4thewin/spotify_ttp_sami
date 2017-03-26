@@ -1,4 +1,5 @@
 class PeopleController < ApplicationController
+  protect_from_forgery with: :null_session
 
   def home
 
@@ -6,32 +7,32 @@ class PeopleController < ApplicationController
 
   def index
     @people = Person.all
-    if @people.empty?
-      render json: "People are empty."
-    else
+
+    # if @people.empty?
+      # render "People are empty."
+    # else
       render json: @people.to_json
-    end
+    # end
   end
 
   def show
     @person = Person.find_by_id(params[:id])
+
     if @person
       render json: @person
     end
   end
 
-  def new
-    @person = Person.new
-  end
-
   def create
-    @person = Person.new(people_params)
+    @person = Person.find_or_create_by(people_params)
 
-    if @person.save
+    # @person = Person.new(people_params)
+
+    # if @person.save
       render json: @person
-    else
-      render json: "Didn't save."
-    end
+    # else
+      # render json: "Didn't save."
+    # end
   end
 
 
@@ -59,7 +60,7 @@ class PeopleController < ApplicationController
   private
 
     def people_params
-      params.require(:person).permit(:name, :favoriteCity)
+      params.permit(:name, :favoriteCity)
     end
 
 end
