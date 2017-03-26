@@ -124,7 +124,11 @@
         })
       })
 
-
+      $.ajax({
+        type: "POST",
+        url: '/people/',
+        data: {'id': '1', 'name': 'Sami', favoriteCity: 'Manhattan'}
+      })
 
     });
   });

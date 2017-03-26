@@ -8,11 +8,9 @@ class PeopleController < ApplicationController
   def index
     @people = Person.all
 
-    # if @people.empty?
-      # render "People are empty."
-    # else
+
       render json: @people.to_json
-    # end
+
   end
 
   def show
@@ -26,13 +24,9 @@ class PeopleController < ApplicationController
   def create
     @person = Person.find_or_create_by(people_params)
 
-    # @person = Person.new(people_params)
 
-    # if @person.save
       render json: @person
-    # else
-      # render json: "Didn't save."
-    # end
+
   end
 
 
